@@ -1,0 +1,32 @@
+name: manage-azure-policy-910e53b2
+on:
+  workflow_dispatch:
+    inputs:
+      remarks:
+        description: 'Reason for triggering the workflow run'
+        required: false
+        default: 'Updating Azure Policies'
+
+
+## Uncomment the following if you wish to automatically trigger workflow run with every commit
+#
+#  push:
+#    paths:
+#      - 'policies/Audit_Linux_machines_that_allow_remote_connections_from_accounts_without_passwords_ea53dbee-c6c9-4f0e-9f9e-de0039b78023/**'
+#      - .github/workflows/manage-azure-policy-910e53b2.yml
+jobs:
+  apply-azure-policy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS_910e53b2}}
+        allow-no-subscriptions: true
+    - name: Create or Update Azure Policies
+      uses: azure/manage-azure-policy@v0
+      with:
+        paths: |
+          policies/Audit_Linux_machines_that_allow_remote_connections_from_accounts_without_passwords_ea53dbee-c6c9-4f0e-9f9e-de0039b78023/**
